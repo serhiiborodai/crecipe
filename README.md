@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ChefRecipes 🍳
 
-## Getting Started
+Платформа для продажи эксклюзивных видеорецептов с авторизацией через Google, оплатой через Stripe и админ-панелью.
 
-First, run the development server:
+## ✨ Возможности
+
+- 🔐 **Авторизация через Google** — Firebase Auth
+- 💳 **Оплата через Stripe** — однократная покупка рецепта
+- 🎬 **Видео с Vimeo** — приватный хостинг для платного контента
+- ⚙️ **Админ-панель** — управление рецептами и настройками сайта
+- 🎨 **Современный UI** — Tailwind CSS, анимации, тёмная тема
+
+## 🚀 Быстрый старт
 
 ```bash
+# Установка
+npm install
+
+# Копирование примера конфига
+cp env.example .env.local
+
+# Заполни .env.local своими ключами (см. SETUP.md)
+
+# Запуск
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Открой [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📖 Документация
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Файл | Описание |
+|------|----------|
+| **[SETUP.md](./SETUP.md)** | Локальная разработка: Firebase, Stripe, Vimeo |
+| **[PRODUCTION.md](./PRODUCTION.md)** | Деплой на Vercel и настройка продакшена |
 
-## Learn More
+### Быстрые ссылки:
+- 🔧 [Настройка Firebase](./SETUP.md#1-firebase)
+- 💳 [Настройка Stripe](./SETUP.md#2-stripe)
+- 🎬 [Настройка Vimeo](./SETUP.md#3-vimeo)
+- 🚀 [Деплой на Vercel](./PRODUCTION.md#2-деплой-на-vercel)
+- 💰 [Live платежи](./PRODUCTION.md#6-переход-на-live-платежи)
 
-To learn more about Next.js, take a look at the following resources:
+## 📁 Структура проекта
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+src/
+├── app/
+│   ├── admin/              # 👨‍💼 Админ-панель
+│   │   ├── recipes/        # Управление рецептами
+│   │   └── settings/       # Настройки сайта
+│   ├── api/                # API роуты
+│   │   ├── create-checkout-session/
+│   │   └── webhooks/stripe/
+│   └── recipes/            # Страницы рецептов
+├── components/             # React компоненты
+├── context/                # AuthContext
+└── lib/                    # Firebase, Stripe, Firestore
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🔑 Переменные окружения
 
-## Deploy on Vercel
+```env
+# Firebase
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+FIREBASE_SERVICE_ACCOUNT_KEY=
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Stripe
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Админы (email через запятую)
+NEXT_PUBLIC_ADMIN_EMAILS=admin@gmail.com
+
+# URL приложения
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+```
+
+## 🛠 Технологии
+
+- **Next.js 16** — App Router, Server Components
+- **TypeScript** — типизация
+- **Tailwind CSS** — стили
+- **Firebase** — Auth + Firestore
+- **Stripe** — платежи
+- **Vimeo** — видеохостинг
+
+## 📄 Лицензия
+
+MIT
