@@ -79,60 +79,60 @@ export default function RecipePage() {
   // Не авторизован - показываем страницу с призывом войти
   if (!user) {
     return (
-      <div className="min-h-screen py-12 px-6">
+      <div className="min-h-screen py-6 sm:py-12 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
           {/* Навигация */}
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-zinc-400 hover:text-white mb-8 transition-colors"
+            className="inline-flex items-center gap-2 text-zinc-400 hover:text-white mb-6 sm:mb-8 transition-colors text-sm sm:text-base"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             Назад
           </Link>
 
           {/* Превью рецепта */}
-          <div className="relative bg-zinc-900/50 rounded-3xl border border-zinc-800/50 overflow-hidden">
+          <div className="relative bg-zinc-900/50 rounded-2xl sm:rounded-3xl border border-zinc-800/50 overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5" />
             
-            <div className="relative p-8 md:p-12">
-              <div className="flex items-start gap-4 mb-6">
+            <div className="relative p-5 sm:p-8 md:p-12">
+              <div className="flex items-start gap-3 mb-4 sm:mb-6">
                 {recipe.category && (
-                  <span className="px-3 py-1 bg-zinc-800/80 text-zinc-300 text-sm rounded-full">
+                  <span className="px-2.5 py-1 sm:px-3 bg-zinc-800/80 text-zinc-300 text-xs sm:text-sm rounded-full">
                     {recipe.category}
                   </span>
                 )}
               </div>
 
-              <h1 className="font-display text-4xl md:text-5xl font-bold text-white mb-4">
+              <h1 className="font-display text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">
                 {recipe.title}
               </h1>
 
-              <p className="text-xl text-zinc-400 mb-8">
+              <p className="text-base sm:text-xl text-zinc-400 mb-6 sm:mb-8">
                 {recipe.shortDescription}
               </p>
 
               {/* Заблокированный контент */}
-              <div className="relative rounded-2xl bg-zinc-800/50 border border-zinc-700/50 p-12 text-center mb-8">
-                <div className="absolute inset-0 backdrop-blur-sm rounded-2xl" />
+              <div className="relative rounded-xl sm:rounded-2xl bg-zinc-800/50 border border-zinc-700/50 p-6 sm:p-12 text-center mb-6 sm:mb-8">
+                <div className="absolute inset-0 backdrop-blur-sm rounded-xl sm:rounded-2xl" />
                 <div className="relative">
-                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-zinc-700/50 flex items-center justify-center">
-                    <svg className="w-10 h-10 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-14 h-14 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 rounded-full bg-zinc-700/50 flex items-center justify-center">
+                    <svg className="w-7 h-7 sm:w-10 sm:h-10 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-2">
+                  <h3 className="text-lg sm:text-2xl font-bold text-white mb-2">
                     Войдите, чтобы продолжить
                   </h3>
-                  <p className="text-zinc-400 mb-6">
-                    Авторизуйтесь через Google, чтобы купить рецепт и получить доступ к {recipe.videos.length} видео
+                  <p className="text-zinc-400 text-sm sm:text-base mb-4 sm:mb-6">
+                    Авторизуйтесь, чтобы купить рецепт и получить доступ к {recipe.videos.length} видео
                   </p>
                   <button
                     onClick={signInWithGoogle}
-                    className="inline-flex items-center gap-3 px-8 py-4 bg-white hover:bg-zinc-100 text-zinc-900 font-bold rounded-xl transition-all shadow-xl"
+                    className="inline-flex items-center gap-2 sm:gap-3 px-5 sm:px-8 py-3 sm:py-4 bg-white hover:bg-zinc-100 text-zinc-900 font-bold rounded-xl transition-all shadow-xl text-sm sm:text-base"
                   >
-                    <svg className="w-6 h-6" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24">
                       <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                       <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
                       <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
@@ -144,7 +144,7 @@ export default function RecipePage() {
               </div>
 
               {/* Что внутри */}
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
                 <div className="bg-zinc-800/30 rounded-xl p-6 border border-zinc-700/30">
                   <h4 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
                     <span className="text-xl">🎬</span> Что включено
@@ -203,36 +203,36 @@ export default function RecipePage() {
     const difficulty = getDifficultyLabel(recipe.difficulty);
     
     return (
-      <div className="min-h-screen py-12 px-6">
+      <div className="min-h-screen py-6 sm:py-12 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
           {/* Навигация */}
           <Link
             href="/recipes"
-            className="inline-flex items-center gap-2 text-zinc-400 hover:text-white mb-8 transition-colors"
+            className="inline-flex items-center gap-2 text-zinc-400 hover:text-white mb-6 sm:mb-8 transition-colors text-sm sm:text-base"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             Ко всем рецептам
           </Link>
 
-          <div className="bg-zinc-900/50 rounded-3xl border border-zinc-800/50 overflow-hidden">
+          <div className="bg-zinc-900/50 rounded-2xl sm:rounded-3xl border border-zinc-800/50 overflow-hidden">
             {/* Шапка рецепта */}
-            <div className="relative p-8 md:p-12 bg-gradient-to-br from-amber-500/5 to-orange-500/5">
-              <div className="flex flex-wrap items-center gap-3 mb-6">
+            <div className="relative p-5 sm:p-8 md:p-12 bg-gradient-to-br from-amber-500/5 to-orange-500/5">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
                 {recipe.category && (
-                  <span className="px-3 py-1 bg-zinc-800/80 text-zinc-300 text-sm rounded-full">
+                  <span className="px-2.5 py-1 sm:px-3 bg-zinc-800/80 text-zinc-300 text-xs sm:text-sm rounded-full">
                     {recipe.category}
                   </span>
                 )}
                 {difficulty && (
-                  <span className={`px-3 py-1 rounded-full text-sm border ${difficulty.color}`}>
+                  <span className={`px-2.5 py-1 sm:px-3 rounded-full text-xs sm:text-sm border ${difficulty.color}`}>
                     {difficulty.text}
                   </span>
                 )}
                 {recipe.cookingTime && (
-                  <span className="px-3 py-1 bg-zinc-800/80 text-zinc-400 text-sm rounded-full flex items-center gap-1">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <span className="px-2.5 py-1 sm:px-3 bg-zinc-800/80 text-zinc-400 text-xs sm:text-sm rounded-full flex items-center gap-1">
+                    <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     {recipe.cookingTime}
@@ -240,16 +240,16 @@ export default function RecipePage() {
                 )}
               </div>
 
-              <h1 className="font-display text-4xl md:text-5xl font-bold text-white mb-4">
+              <h1 className="font-display text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">
                 {recipe.title}
               </h1>
 
-              <p className="text-xl text-zinc-400 mb-8 whitespace-pre-line">
+              <p className="text-sm sm:text-xl text-zinc-400 mb-6 sm:mb-8 whitespace-pre-line">
                 {recipe.description}
               </p>
 
               {/* Кнопка покупки */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div className="flex flex-col gap-3 sm:gap-4">
                 <BuyButton recipe={recipe} />
                 
                 {recipe.youtubePromoUrl && (
@@ -257,9 +257,9 @@ export default function RecipePage() {
                     href={recipe.youtubePromoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-6 py-4 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-colors"
+                    className="flex items-center justify-center sm:justify-start gap-2 px-5 sm:px-6 py-3 sm:py-4 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-colors text-sm sm:text-base"
                   >
-                    <svg className="w-5 h-5 text-red-500" viewBox="0 0 24 24" fill="currentColor">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                     </svg>
                     Смотреть промо на YouTube
@@ -269,7 +269,7 @@ export default function RecipePage() {
             </div>
 
             {/* Заблокированный контент */}
-            <div className="p-8 md:p-12 border-t border-zinc-800/50">
+            <div className="p-5 sm:p-8 md:p-12 border-t border-zinc-800/50">
               <h2 className="text-2xl font-bold text-white mb-6">Содержание курса</h2>
               
               <div className="space-y-4">
@@ -325,41 +325,41 @@ export default function RecipePage() {
   const difficulty = getDifficultyLabel(recipe.difficulty);
 
   return (
-    <div className="min-h-screen py-12 px-6">
+    <div className="min-h-screen py-6 sm:py-12 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto">
         {/* Навигация */}
         <Link
           href="/recipes"
-          className="inline-flex items-center gap-2 text-zinc-400 hover:text-white mb-8 transition-colors"
+          className="inline-flex items-center gap-2 text-zinc-400 hover:text-white mb-6 sm:mb-8 transition-colors text-sm sm:text-base"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
           Ко всем рецептам
         </Link>
 
         {/* Шапка */}
-        <div className="mb-12">
-          <div className="flex flex-wrap items-center gap-3 mb-4">
-            <span className="px-3 py-1.5 bg-emerald-500 text-white text-sm font-medium rounded-full flex items-center gap-1.5">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="mb-8 sm:mb-12">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+            <span className="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-emerald-500 text-white text-xs sm:text-sm font-medium rounded-full flex items-center gap-1 sm:gap-1.5">
+              <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
               Куплено
             </span>
             {recipe.category && (
-              <span className="px-3 py-1 bg-zinc-800/80 text-zinc-300 text-sm rounded-full">
+              <span className="px-2.5 py-1 sm:px-3 bg-zinc-800/80 text-zinc-300 text-xs sm:text-sm rounded-full">
                 {recipe.category}
               </span>
             )}
             {difficulty && (
-              <span className={`px-3 py-1 rounded-full text-sm border ${difficulty.color}`}>
+              <span className={`px-2.5 py-1 sm:px-3 rounded-full text-xs sm:text-sm border ${difficulty.color}`}>
                 {difficulty.text}
               </span>
             )}
             {recipe.cookingTime && (
-              <span className="px-3 py-1 bg-zinc-800/80 text-zinc-400 text-sm rounded-full flex items-center gap-1">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <span className="px-2.5 py-1 sm:px-3 bg-zinc-800/80 text-zinc-400 text-xs sm:text-sm rounded-full flex items-center gap-1">
+                <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 {recipe.cookingTime}
@@ -367,33 +367,33 @@ export default function RecipePage() {
             )}
           </div>
 
-          <h1 className="font-display text-4xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="font-display text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">
             {recipe.title}
           </h1>
 
-          <p className="text-xl text-zinc-400 whitespace-pre-line">
+          <p className="text-sm sm:text-xl text-zinc-400 whitespace-pre-line">
             {recipe.description}
           </p>
         </div>
 
         {/* Видео */}
-        <div className="space-y-12">
+        <div className="space-y-6 sm:space-y-12">
           {recipe.videos.map((video, index) => (
-            <div key={video.id} className="bg-zinc-900/50 rounded-2xl border border-zinc-800/50 overflow-hidden">
-              <div className="p-6 border-b border-zinc-800/50">
-                <div className="flex items-center gap-3">
-                  <span className="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center text-zinc-900 font-bold text-sm">
+            <div key={video.id} className="bg-zinc-900/50 rounded-xl sm:rounded-2xl border border-zinc-800/50 overflow-hidden">
+              <div className="p-4 sm:p-6 border-b border-zinc-800/50">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-amber-500 flex items-center justify-center text-zinc-900 font-bold text-xs sm:text-sm flex-shrink-0">
                     {index + 1}
                   </span>
-                  <div>
-                    <h2 className="text-xl font-bold text-white">{video.title}</h2>
+                  <div className="min-w-0">
+                    <h2 className="text-base sm:text-xl font-bold text-white truncate">{video.title}</h2>
                     {video.description && (
-                      <p className="text-zinc-400 text-sm">{video.description}</p>
+                      <p className="text-zinc-400 text-xs sm:text-sm truncate">{video.description}</p>
                     )}
                   </div>
                 </div>
               </div>
-              <div className="p-4">
+              <div className="p-2 sm:p-4">
                 <VimeoPlayer vimeoId={video.vimeoId} title={video.title} />
               </div>
             </div>
@@ -402,18 +402,18 @@ export default function RecipePage() {
 
         {/* Ингредиенты */}
         {recipe.ingredients && recipe.ingredients.length > 0 && (
-          <div className="mt-12 p-8 bg-zinc-900/50 rounded-2xl border border-zinc-800/50">
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-              <span className="text-3xl">🥗</span> Ингредиенты
+          <div className="mt-8 sm:mt-12 p-5 sm:p-8 bg-zinc-900/50 rounded-xl sm:rounded-2xl border border-zinc-800/50">
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+              <span className="text-2xl sm:text-3xl">🥗</span> Ингредиенты
             </h2>
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
               {recipe.ingredients.map((ingredient, index) => (
                 <div
                   key={index}
-                  className="flex items-center gap-3 p-3 bg-zinc-800/30 rounded-xl"
+                  className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-zinc-800/30 rounded-lg sm:rounded-xl"
                 >
-                  <div className="w-2 h-2 rounded-full bg-amber-500" />
-                  <span className="text-zinc-300">{ingredient}</span>
+                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-500 flex-shrink-0" />
+                  <span className="text-zinc-300 text-sm sm:text-base">{ingredient}</span>
                 </div>
               ))}
             </div>

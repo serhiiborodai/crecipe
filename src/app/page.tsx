@@ -63,32 +63,32 @@ export default function Home() {
         </div>
 
         {/* Hero секция */}
-        <section className="relative pt-32 pb-20 px-6">
+        <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-20 px-4 sm:px-6">
           <div className="max-w-5xl mx-auto text-center">
             {/* Декоративные элементы */}
-            <div className="flex justify-center gap-4 mb-8 opacity-0 animate-fade-in">
-              <span className="text-5xl animate-float">🍳</span>
-              <span className="text-5xl animate-float delay-200">👨‍🍳</span>
-              <span className="text-5xl animate-float delay-400">🔥</span>
+            <div className="flex justify-center gap-3 sm:gap-4 mb-6 sm:mb-8 opacity-0 animate-fade-in">
+              <span className="text-4xl sm:text-5xl animate-float">🍳</span>
+              <span className="text-4xl sm:text-5xl animate-float delay-200">👨‍🍳</span>
+              <span className="text-4xl sm:text-5xl animate-float delay-400">🔥</span>
             </div>
 
-            <h1 className="font-display text-5xl md:text-7xl font-bold mb-6 opacity-0 animate-fade-in delay-100">
+            <h1 className="font-display text-3xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 opacity-0 animate-fade-in delay-100 px-2">
               {settings?.heroTitle?.split(' ').slice(0, -1).join(' ')}{' '}
               <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-400 bg-clip-text text-transparent">
                 {settings?.heroTitle?.split(' ').slice(-1)[0] || 'профессионал'}
               </span>
             </h1>
 
-            <p className="text-xl md:text-2xl text-zinc-400 mb-12 max-w-3xl mx-auto leading-relaxed opacity-0 animate-fade-in delay-200">
+            <p className="text-base sm:text-xl md:text-2xl text-zinc-400 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed opacity-0 animate-fade-in delay-200 px-2">
               {settings?.heroDescription}
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-in delay-300">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center opacity-0 animate-fade-in delay-300 px-4 sm:px-0">
               <button
                 onClick={signInWithGoogle}
-                className="group px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-zinc-900 font-bold text-lg rounded-xl transition-all duration-300 shadow-xl shadow-amber-500/25 hover:shadow-amber-500/40 hover:scale-105 flex items-center justify-center gap-3"
+                className="group px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-zinc-900 font-bold text-base sm:text-lg rounded-xl transition-all duration-300 shadow-xl shadow-amber-500/25 hover:shadow-amber-500/40 hover:scale-105 flex items-center justify-center gap-2 sm:gap-3"
               >
-                <svg className="w-6 h-6" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24">
                   <path
                     fill="currentColor"
                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -111,7 +111,7 @@ export default function Home() {
 
               <a
                 href="#preview"
-                className="px-8 py-4 border-2 border-zinc-700 hover:border-zinc-600 text-white font-semibold text-lg rounded-xl transition-all duration-300 hover:bg-zinc-800/50 flex items-center justify-center gap-2"
+                className="px-6 sm:px-8 py-3.5 sm:py-4 border-2 border-zinc-700 hover:border-zinc-600 text-white font-semibold text-base sm:text-lg rounded-xl transition-all duration-300 hover:bg-zinc-800/50 flex items-center justify-center gap-2"
               >
                 Посмотреть рецепты
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -123,13 +123,13 @@ export default function Home() {
         </section>
 
         {/* Превью рецептов */}
-        <section id="preview" className="py-20 px-6">
+        <section id="preview" className="py-12 sm:py-20 px-4 sm:px-6">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="font-display text-4xl md:text-5xl font-bold mb-4">
+            <div className="text-center mb-10 sm:mb-16">
+              <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
                 Доступные <span className="text-amber-400">рецепты</span>
               </h2>
-              <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
+              <p className="text-zinc-400 text-sm sm:text-lg max-w-2xl mx-auto px-2">
                 {isConfigured 
                   ? 'Войдите в аккаунт, чтобы получить доступ к полным видеоурокам'
                   : 'Настройте Firebase для включения авторизации и покупок'
@@ -137,15 +137,15 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
               {recipes.slice(0, 3).map((recipe) => (
                 <article 
                   key={recipe.id} 
-                  className="group relative bg-zinc-900/50 rounded-2xl overflow-hidden border border-zinc-800/50 cursor-pointer hover:border-amber-500/30 transition-all"
+                  className="group relative bg-zinc-900/50 rounded-xl sm:rounded-2xl overflow-hidden border border-zinc-800/50 cursor-pointer hover:border-amber-500/30 transition-all active:scale-[0.98]"
                   onClick={signInWithGoogle}
                 >
-                  <div className="relative h-56 bg-gradient-to-br from-zinc-800 to-zinc-900 overflow-hidden">
-                    <div className="absolute inset-0 flex items-center justify-center text-6xl opacity-30">
+                  <div className="relative h-40 sm:h-56 bg-gradient-to-br from-zinc-800 to-zinc-900 overflow-hidden">
+                    <div className="absolute inset-0 flex items-center justify-center text-5xl sm:text-6xl opacity-30">
                       {recipe.category === 'Мясо' && '🥩'}
                       {recipe.category === 'Паста' && '🍝'}
                       {recipe.category === 'Десерты' && '🍮'}
@@ -154,22 +154,22 @@ export default function Home() {
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent" />
                     <div className="absolute inset-0 bg-zinc-900/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <span className="text-white font-semibold flex items-center gap-2">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <span className="text-white font-semibold flex items-center gap-2 text-sm sm:text-base">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                         {isConfigured ? 'Войдите для доступа' : 'Настройте Firebase'}
                       </span>
                     </div>
                   </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-white mb-2">{recipe.title}</h3>
-                    <p className="text-zinc-400 text-sm mb-4 line-clamp-2">{recipe.shortDescription}</p>
+                  <div className="p-4 sm:p-6">
+                    <h3 className="text-lg sm:text-xl font-bold text-white mb-1 sm:mb-2">{recipe.title}</h3>
+                    <p className="text-zinc-400 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2">{recipe.shortDescription}</p>
                     <div className="flex items-center justify-between">
-                      <span className="text-amber-400 font-bold">
+                      <span className="text-amber-400 font-bold text-sm sm:text-base">
                         {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(recipe.price / 100)}
                       </span>
-                      <span className="text-zinc-500 text-sm">{recipe.videos.length} видео</span>
+                      <span className="text-zinc-500 text-xs sm:text-sm">{recipe.videos.length} видео</span>
                     </div>
                   </div>
                 </article>
@@ -194,16 +194,16 @@ export default function Home() {
 
         {/* Features */}
         {settings?.features && settings.features.length > 0 && (
-          <section className="py-20 px-6 bg-zinc-900/30">
+          <section className="py-12 sm:py-20 px-4 sm:px-6 bg-zinc-900/30">
             <div className="max-w-7xl mx-auto">
-              <div className="grid md:grid-cols-3 gap-8">
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-8">
                 {settings.features.map((feature, index) => (
-                  <div key={index} className="text-center p-8">
-                    <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center text-3xl">
+                  <div key={index} className="text-center p-4 sm:p-8">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-6 rounded-xl sm:rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center text-2xl sm:text-3xl">
                       {feature.emoji}
                     </div>
-                    <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
-                    <p className="text-zinc-400">{feature.description}</p>
+                    <h3 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3">{feature.title}</h3>
+                    <p className="text-zinc-400 text-sm sm:text-base">{feature.description}</p>
                   </div>
                 ))}
               </div>
@@ -223,30 +223,30 @@ export default function Home() {
 
   // Авторизован - показываем список рецептов
   return (
-    <div className="min-h-screen py-12 px-6">
+    <div className="min-h-screen py-8 sm:py-12 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
         {/* Заголовок */}
-        <div className="mb-12">
-          <h1 className="font-display text-4xl md:text-5xl font-bold mb-4">
+        <div className="mb-8 sm:mb-12">
+          <h1 className="font-display text-2xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-4">
             Добро пожаловать, <span className="text-amber-400">{user.displayName?.split(' ')[0]}</span>!
           </h1>
-          <p className="text-zinc-400 text-lg">
+          <p className="text-zinc-400 text-sm sm:text-lg">
             Вот все доступные рецепты. Купленные отмечены зелёным бейджем.
           </p>
         </div>
 
         {/* Сетка рецептов */}
         {recipes.length > 0 ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
             {recipes.map((recipe) => (
               <RecipeCard key={recipe.id} recipe={recipe} />
             ))}
           </div>
         ) : (
-          <div className="text-center py-20">
-            <div className="text-6xl mb-4">📖</div>
-            <h2 className="text-2xl font-bold text-white mb-2">Рецептов пока нет</h2>
-            <p className="text-zinc-400">Скоро здесь появятся эксклюзивные рецепты!</p>
+          <div className="text-center py-16 sm:py-20">
+            <div className="text-5xl sm:text-6xl mb-4">📖</div>
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Рецептов пока нет</h2>
+            <p className="text-zinc-400 text-sm sm:text-base">Скоро здесь появятся эксклюзивные рецепты!</p>
           </div>
         )}
       </div>
