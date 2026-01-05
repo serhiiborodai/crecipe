@@ -76,6 +76,12 @@ export default function RecipePage() {
     }
   };
 
+  // Извлекаем YouTube video ID из URL
+  const getYouTubeVideoId = (url: string) => {
+    const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?\s]+)/);
+    return match ? match[1] : null;
+  };
+
   // Не авторизован - показываем страницу с призывом войти
   if (!user) {
     return (
@@ -108,6 +114,21 @@ export default function RecipePage() {
               <h1 className="font-display text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">
                 {recipe.title}
               </h1>
+
+              {/* YouTube промо видео */}
+              {recipe.youtubePromoUrl && getYouTubeVideoId(recipe.youtubePromoUrl) && (
+                <div className="mb-6 sm:mb-8 rounded-xl sm:rounded-2xl overflow-hidden bg-black">
+                  <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                    <iframe
+                      className="absolute inset-0 w-full h-full"
+                      src={`https://www.youtube.com/embed/${getYouTubeVideoId(recipe.youtubePromoUrl)}?autoplay=1&mute=1&rel=0&modestbranding=1`}
+                      title="Промо видео"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                </div>
+              )}
 
               <p className="text-base sm:text-xl text-zinc-400 mb-6 sm:mb-8">
                 {recipe.shortDescription}
@@ -161,35 +182,12 @@ export default function RecipePage() {
                   </ul>
                 </div>
 
-                <div className="space-y-4">
-                  <div className="bg-zinc-800/30 rounded-xl p-6 border border-zinc-700/30">
+                <div className="bg-zinc-800/30 rounded-xl p-6 border border-zinc-700/30">
                     <div className="text-3xl font-bold text-amber-400 mb-1">
                       {formatPrice(recipe.price)}
                     </div>
                     <p className="text-zinc-500 text-sm">Единоразовая оплата</p>
                   </div>
-
-                  {recipe.youtubePromoUrl && (
-                    <a
-                      href={recipe.youtubePromoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block bg-red-500/10 rounded-xl p-4 border border-red-500/30 hover:bg-red-500/20 transition-colors"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-red-500 flex items-center justify-center">
-                          <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                          </svg>
-                        </div>
-                        <div>
-                          <div className="text-white font-medium">Смотреть промо</div>
-                          <div className="text-zinc-400 text-sm">на YouTube</div>
-                        </div>
-                      </div>
-                    </a>
-                  )}
-                </div>
               </div>
             </div>
           </div>
@@ -244,28 +242,27 @@ export default function RecipePage() {
                 {recipe.title}
               </h1>
 
+              {/* YouTube промо видео */}
+              {recipe.youtubePromoUrl && getYouTubeVideoId(recipe.youtubePromoUrl) && (
+                <div className="mb-6 sm:mb-8 rounded-xl sm:rounded-2xl overflow-hidden bg-black">
+                  <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                    <iframe
+                      className="absolute inset-0 w-full h-full"
+                      src={`https://www.youtube.com/embed/${getYouTubeVideoId(recipe.youtubePromoUrl)}?autoplay=1&mute=1&rel=0&modestbranding=1`}
+                      title="Промо видео"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                </div>
+              )}
+
               <p className="text-sm sm:text-xl text-zinc-400 mb-6 sm:mb-8 whitespace-pre-line">
                 {recipe.description}
               </p>
 
               {/* Кнопка покупки */}
-              <div className="flex flex-col gap-3 sm:gap-4">
-                <BuyButton recipe={recipe} />
-                
-                {recipe.youtubePromoUrl && (
-                  <a
-                    href={recipe.youtubePromoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center sm:justify-start gap-2 px-5 sm:px-6 py-3 sm:py-4 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-colors text-sm sm:text-base"
-                  >
-                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                    </svg>
-                    Смотреть промо на YouTube
-                  </a>
-                )}
-              </div>
+              <BuyButton recipe={recipe} />
             </div>
 
             {/* Заблокированный контент */}
