@@ -13,6 +13,7 @@ export default function AdminSettingsPage() {
     heroYoutubeUrl: '',
     footerText: '',
     features: [],
+    faq: [],
     categories: [],
     recipesPerPage: 12,
   });
