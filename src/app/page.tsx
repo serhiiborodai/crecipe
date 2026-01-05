@@ -88,18 +88,20 @@ export default function Home() {
       console.error('Ошибка загрузки данных:', error);
     }
     setLoading(false);
-    
-    // Скролл к якорю после загрузки
-    setTimeout(() => {
+  };
+
+  // Скролл к якорю после загрузки
+  useEffect(() => {
+    if (!loading && !authLoading) {
       const hash = window.location.hash;
       if (hash) {
-        const element = document.querySelector(hash);
+        const element = document.getElementById(hash.slice(1));
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
       }
-    }, 100);
-  };
+    }
+  }, [loading, authLoading]);
 
   const handleRecipeClick = (recipeId: string) => {
     if (user) {
@@ -342,12 +344,6 @@ export default function Home() {
           <FaqAccordion faq={settings.faq} />
         )}
 
-        {/* Footer */}
-        <footer className="py-12 px-6 border-t border-zinc-800/50">
-          <div className="max-w-7xl mx-auto text-center text-zinc-500">
-            <p>{settings?.footerText}</p>
-          </div>
-        </footer>
-      </div>
+        </div>
   );
 }
