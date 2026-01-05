@@ -73,12 +73,12 @@ export default function Home() {
           <div className="max-w-5xl mx-auto text-center">
             {/* YouTube видео или декоративные эмодзи */}
             {settings?.heroYoutubeUrl && getYouTubeVideoId(settings.heroYoutubeUrl) ? (
-              <div className="mb-8 sm:mb-12 max-w-3xl mx-auto opacity-0 animate-fade-in">
-                <div className="rounded-xl sm:rounded-2xl overflow-hidden bg-black shadow-2xl shadow-amber-500/10">
+              <div className="mb-6 sm:mb-12 mx-auto opacity-0 animate-fade-in px-0 sm:px-4 max-w-4xl">
+                <div className="rounded-none sm:rounded-2xl overflow-hidden bg-black shadow-2xl shadow-amber-500/10">
                   <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
                     <iframe
                       className="absolute inset-0 w-full h-full"
-                      src={`https://www.youtube.com/embed/${getYouTubeVideoId(settings.heroYoutubeUrl)}?rel=0&modestbranding=1`}
+                      src={`https://www.youtube.com/embed/${getYouTubeVideoId(settings.heroYoutubeUrl)}?autoplay=1&mute=1&loop=1&playlist=${getYouTubeVideoId(settings.heroYoutubeUrl)}&rel=0&modestbranding=1&playsinline=1&controls=1`}
                       title="Промо видео"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
