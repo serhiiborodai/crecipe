@@ -88,6 +88,17 @@ export default function Home() {
       console.error('Ошибка загрузки данных:', error);
     }
     setLoading(false);
+    
+    // Скролл к якорю после загрузки
+    setTimeout(() => {
+      const hash = window.location.hash;
+      if (hash) {
+        const element = document.querySelector(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    }, 100);
   };
 
   const handleRecipeClick = (recipeId: string) => {
