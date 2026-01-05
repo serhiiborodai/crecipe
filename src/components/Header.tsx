@@ -44,23 +44,21 @@ export default function Header() {
 
           {/* Desktop навигация */}
           <div className="hidden md:flex items-center gap-6">
-            {!user && (
-              <a
-                href="#faq"
-                className="text-zinc-400 hover:text-white transition-colors font-medium"
-              >
-                FAQ
-              </a>
-            )}
-
             {user && (
               <Link
                 href="/recipes"
                 className="text-zinc-400 hover:text-white transition-colors font-medium"
               >
-                Мои рецепты
+                Каталог
               </Link>
             )}
+
+            <a
+              href="/#faq"
+              className="text-zinc-400 hover:text-white transition-colors font-medium"
+            >
+              FAQ
+            </a>
 
             {isAdmin && (
               <Link
@@ -187,8 +185,17 @@ export default function Header() {
                   className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
                 >
                   <span className="text-xl">📖</span>
-                  Мои рецепты
+                  Каталог рецептов
                 </Link>
+
+                <a
+                  href="/#faq"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
+                >
+                  <span className="text-xl">❓</span>
+                  FAQ
+                </a>
 
                 {isAdmin && (
                   <Link
