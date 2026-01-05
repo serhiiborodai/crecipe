@@ -5,6 +5,12 @@ import { getPublishedRecipes, getSiteSettings, type Recipe, type SiteSettings } 
 import RecipeCard from '@/components/RecipeCard';
 import { useEffect, useState } from 'react';
 
+// Извлекаем YouTube video ID из URL
+const getYouTubeVideoId = (url: string) => {
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?\s]+)/);
+  return match ? match[1] : null;
+};
+
 export default function Home() {
   const { user, loading: authLoading, isConfigured, signInWithGoogle } = useAuth();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -65,12 +71,28 @@ export default function Home() {
         {/* Hero секция */}
         <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-20 px-4 sm:px-6">
           <div className="max-w-5xl mx-auto text-center">
-            {/* Декоративные элементы */}
-            <div className="flex justify-center gap-3 sm:gap-4 mb-6 sm:mb-8 opacity-0 animate-fade-in">
-              <span className="text-4xl sm:text-5xl animate-float">🍳</span>
-              <span className="text-4xl sm:text-5xl animate-float delay-200">👨‍🍳</span>
-              <span className="text-4xl sm:text-5xl animate-float delay-400">🔥</span>
-            </div>
+            {/* YouTube видео или декоративные эмодзи */}
+            {settings?.heroYoutubeUrl && getYouTubeVideoId(settings.heroYoutubeUrl) ? (
+              <div className="mb-8 sm:mb-12 max-w-3xl mx-auto opacity-0 animate-fade-in">
+                <div className="rounded-xl sm:rounded-2xl overflow-hidden bg-black shadow-2xl shadow-amber-500/10">
+                  <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                    <iframe
+                      className="absolute inset-0 w-full h-full"
+                      src={`https://www.youtube.com/embed/${getYouTubeVideoId(settings.heroYoutubeUrl)}?rel=0&modestbranding=1`}
+                      title="Промо видео"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="flex justify-center gap-3 sm:gap-4 mb-6 sm:mb-8 opacity-0 animate-fade-in">
+                <span className="text-4xl sm:text-5xl animate-float">🍳</span>
+                <span className="text-4xl sm:text-5xl animate-float delay-200">👨‍🍳</span>
+                <span className="text-4xl sm:text-5xl animate-float delay-400">🔥</span>
+              </div>
+            )}
 
             <h1 className="font-display text-3xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 opacity-0 animate-fade-in delay-100 px-2">
               {settings?.heroTitle?.split(' ').slice(0, -1).join(' ')}{' '}

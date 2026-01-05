@@ -43,6 +43,7 @@ export interface SiteSettings {
   heroTitle: string;
   heroSubtitle: string;
   heroDescription: string;
+  heroYoutubeUrl?: string;
   footerText: string;
   features: {
     title: string;
@@ -125,6 +126,7 @@ const DEFAULT_SETTINGS: SiteSettings = {
   heroTitle: 'Готовьте как профессионал',
   heroSubtitle: 'ChefRecipes',
   heroDescription: 'Эксклюзивные видеорецепты и мастер-классы от шеф-повара. Пошаговые инструкции, секреты техники и авторские соусы — всё для того, чтобы ваши блюда стали ресторанного уровня.',
+  heroYoutubeUrl: '',
   footerText: '© 2024 ChefRecipes. Все права защищены.',
   features: [
     { title: 'HD Видео', description: 'Качественные видеоуроки с близкими ракурсами', emoji: '🎬' },

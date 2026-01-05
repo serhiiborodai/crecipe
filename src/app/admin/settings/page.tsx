@@ -10,6 +10,7 @@ export default function AdminSettingsPage() {
     heroTitle: '',
     heroSubtitle: '',
     heroDescription: '',
+    heroYoutubeUrl: '',
     footerText: '',
     features: [],
     categories: [],
@@ -108,6 +109,18 @@ export default function AdminSettingsPage() {
                 className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-amber-500 focus:outline-none resize-none"
                 placeholder="Эксклюзивные видеорецепты и мастер-классы..."
               />
+            </div>
+
+            <div>
+              <label className="block text-zinc-400 text-sm mb-2">YouTube видео (ссылка)</label>
+              <input
+                type="text"
+                value={settings.heroYoutubeUrl || ''}
+                onChange={(e) => setSettings({ ...settings, heroYoutubeUrl: e.target.value })}
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-amber-500 focus:outline-none"
+                placeholder="https://www.youtube.com/watch?v=..."
+              />
+              <p className="text-zinc-500 text-xs mt-1">Видео будет показано на главной странице вместо эмодзи</p>
             </div>
           </div>
         </section>
