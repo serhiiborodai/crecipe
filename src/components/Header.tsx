@@ -44,6 +44,15 @@ export default function Header() {
 
           {/* Desktop навигация */}
           <div className="hidden md:flex items-center gap-6">
+            {!user && (
+              <a
+                href="#faq"
+                className="text-zinc-400 hover:text-white transition-colors font-medium"
+              >
+                FAQ
+              </a>
+            )}
+
             {user && (
               <Link
                 href="/recipes"
@@ -205,13 +214,23 @@ export default function Header() {
             )}
 
             {!user && !loading && (
-              <button
-                onClick={() => {
-                  signInWithGoogle();
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-white hover:bg-zinc-100 text-zinc-900 rounded-lg font-medium transition-all"
-              >
+              <>
+                <a
+                  href="#faq"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
+                >
+                  <span className="text-xl">❓</span>
+                  FAQ
+                </a>
+
+                <button
+                  onClick={() => {
+                    signInWithGoogle();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-white hover:bg-zinc-100 text-zinc-900 rounded-lg font-medium transition-all"
+                >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path
                     fill="currentColor"
@@ -231,7 +250,8 @@ export default function Header() {
                   />
                 </svg>
                 Войти через Google
-              </button>
+                </button>
+              </>
             )}
           </nav>
         </div>

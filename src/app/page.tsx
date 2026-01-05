@@ -5,6 +5,58 @@ import { getPublishedRecipes, getSiteSettings, type Recipe, type SiteSettings } 
 import RecipeCard from '@/components/RecipeCard';
 import { useEffect, useState } from 'react';
 
+// Компонент FAQ аккордеон
+function FaqAccordion({ faq }: { faq: { question: string; answer: string }[] }) {
+  const [openIndex, setOpenIndex] = useState<number>(0); // Первый открыт по умолчанию
+
+  if (!faq || faq.length === 0) return null;
+
+  return (
+    <section id="faq" className="py-12 sm:py-20 px-4 sm:px-6">
+      <div className="max-w-3xl mx-auto">
+        <h2 className="font-display text-2xl sm:text-4xl font-bold text-center mb-8 sm:mb-12">
+          Часто задаваемые <span className="text-amber-400">вопросы</span>
+        </h2>
+
+        <div className="space-y-3 sm:space-y-4">
+          {faq.map((item, index) => (
+            <div
+              key={index}
+              className="bg-zinc-900/50 rounded-xl sm:rounded-2xl border border-zinc-800/50 overflow-hidden"
+            >
+              <button
+                onClick={() => setOpenIndex(openIndex === index ? -1 : index)}
+                className="w-full px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 text-left hover:bg-zinc-800/30 transition-colors"
+              >
+                <span className="text-white font-medium text-sm sm:text-base">{item.question}</span>
+                <svg
+                  className={`w-5 h-5 text-amber-400 flex-shrink-0 transition-transform duration-300 ${
+                    openIndex === index ? 'rotate-180' : ''
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div
+                className={`overflow-hidden transition-all duration-300 ${
+                  openIndex === index ? 'max-h-96' : 'max-h-0'
+                }`}
+              >
+                <div className="px-5 sm:px-6 pb-4 sm:pb-5 text-zinc-400 text-sm sm:text-base leading-relaxed">
+                  {item.answer}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // Извлекаем YouTube video ID из URL
 const getYouTubeVideoId = (url: string) => {
   const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?\s]+)/);
@@ -231,6 +283,11 @@ export default function Home() {
               </div>
             </div>
           </section>
+        )}
+
+        {/* FAQ */}
+        {settings?.faq && settings.faq.length > 0 && (
+          <FaqAccordion faq={settings.faq} />
         )}
 
         {/* Footer */}

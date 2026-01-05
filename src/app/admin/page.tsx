@@ -64,10 +64,25 @@ export default function AdminPage() {
           <div className="text-zinc-500 text-xs sm:text-sm">Редактировать →</div>
         </Link>
 
+        {/* FAQ */}
+        <Link
+          href="/admin/faq"
+          className="bg-zinc-900 rounded-xl border border-zinc-800 p-4 sm:p-6 hover:border-amber-500/50 transition-colors group"
+        >
+          <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">❓</div>
+          <h2 className="text-base sm:text-xl font-bold text-white mb-1 sm:mb-2 group-hover:text-amber-400 transition-colors">
+            FAQ
+          </h2>
+          <p className="text-zinc-400 text-xs sm:text-sm mb-3 sm:mb-4 hidden sm:block">
+            Вопросы и ответы на главной
+          </p>
+          <div className="text-zinc-500 text-xs sm:text-sm">Редактировать →</div>
+        </Link>
+
         {/* Создать рецепт */}
         <Link
           href="/admin/recipes/new"
-          className="col-span-2 sm:col-span-1 bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-xl border border-amber-500/30 p-4 sm:p-6 hover:border-amber-500/50 transition-colors group"
+          className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-xl border border-amber-500/30 p-4 sm:p-6 hover:border-amber-500/50 transition-colors group"
         >
           <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">➕</div>
           <h2 className="text-base sm:text-xl font-bold text-white mb-1 sm:mb-2 group-hover:text-amber-400 transition-colors">
