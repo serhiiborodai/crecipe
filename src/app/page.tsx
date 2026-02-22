@@ -296,7 +296,7 @@ function HomeContent() {
                   className="px-6 sm:px-8 py-3.5 sm:py-4 border-2 border-zinc-700 hover:border-amber-500/50 text-white font-semibold text-base sm:text-lg rounded-xl transition-all duration-300 hover:bg-zinc-800/50 flex items-center justify-center gap-2"
                 >
                   <span>🎁</span>
-                  Подарить рецепт
+                  Подарить курс
                 </button>
               ) : (
                 <a
