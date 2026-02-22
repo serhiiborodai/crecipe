@@ -249,7 +249,7 @@ export default function Home() {
               })()}
             </h1>
 
-            <p className="text-base sm:text-xl md:text-2xl text-zinc-400 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed opacity-0 animate-fade-in delay-200 px-2">
+            <p className="text-base sm:text-xl md:text-2xl text-zinc-400 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed opacity-0 animate-fade-in delay-200 px-2 whitespace-pre-line">
               {settings?.heroDescription}
             </p>
 
