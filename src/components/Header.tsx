@@ -30,16 +30,18 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-800/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+      <header className="site-header">
+        <div className="site-header__inner">
           {/* Логотип */}
-          <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-orange-500/20 group-hover:shadow-orange-500/40 transition-shadow">
-              <span className="text-lg sm:text-xl">🍳</span>
-            </div>
-            <span className="text-lg sm:text-xl font-bold text-white tracking-tight">
-              Chef<span className="text-amber-400">Recipes</span>
-            </span>
+          <Link href="/" className="site-logo">
+            <Image
+              src="/logo.png"
+              alt="ChefRecipes"
+              width={300}
+              height={100}
+              className="site-logo__image"
+              priority
+            />
           </Link>
 
           {/* Desktop навигация */}

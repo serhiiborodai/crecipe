@@ -109,3 +109,58 @@ body {
 .hover-glow:hover {
   box-shadow: 0 0 40px rgba(245, 158, 11, 0.15);
 }
+
+/* ========== HEADER ========== */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: rgba(9, 9, 11, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(63, 63, 70, 0.5);
+}
+
+.site-header__inner {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .site-header__inner {
+    padding: 0 1.5rem;
+    height: 5rem;
+  }
+}
+
+/* ========== LOGO ========== */
+.site-logo {
+  display: block;
+}
+
+.site-logo__image {
+  min-width: 300px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  transition: opacity 0.2s ease;
+  max-height: 175px;
+}
+
+@media (max-width: 639px) {
+  .site-logo__image {
+    max-height: 140px;
+    margin-left: -60px;
+  }
+}
+
+.site-logo:hover .site-logo__image {
+  opacity: 0.85;
+}
