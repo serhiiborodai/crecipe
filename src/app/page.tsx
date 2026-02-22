@@ -225,17 +225,18 @@ function HomeContent() {
             <h1 className="font-display text-3xl sm:text-4xl md:text-[48px] font-bold mb-4 sm:mb-6 opacity-0 animate-fade-in delay-100 px-2">
               {(() => {
                 const title = settings?.heroTitle || 'Станьте {{профессионалом}}';
-                const match = title.match(/^(.*?)\{\{(.+?)\}\}(.*)$/);
-                if (match) {
-                  return (
-                    <>
-                      {match[1]}
-                      <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-400 bg-clip-text text-transparent">
-                        {match[2]}
-                      </span>
-                      {match[3]}
-                    </>
-                  );
+                if (title.includes('{{')) {
+                  const parts = title.split(/(\{\{.+?\}\})/g);
+                  return parts.map((part, i) => {
+                    if (part.startsWith('{{') && part.endsWith('}}')) {
+                      return (
+                        <span key={i} className="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-400 bg-clip-text text-transparent">
+                          {part.slice(2, -2)}
+                        </span>
+                      );
+                    }
+                    return part;
+                  });
                 }
                 const words = title.split(' ');
                 return (
