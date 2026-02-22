@@ -318,7 +318,7 @@ function HomeContent() {
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-10 sm:mb-16">
               <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
-                Новые <span className="text-amber-400">курсы</span>
+                <span className="text-amber-400">Курсы</span>
               </h2>
               <p className="text-zinc-400 text-sm sm:text-lg max-w-2xl mx-auto px-2">
                 {user 
@@ -331,7 +331,7 @@ function HomeContent() {
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
-              {recipes.slice(-3).reverse().map((recipe) => (
+              {recipes.slice(-20).reverse().map((recipe) => (
                 <article 
                   key={recipe.id} 
                   className="group relative bg-zinc-900/50 rounded-xl sm:rounded-2xl overflow-hidden border border-zinc-800/50 cursor-pointer hover:border-amber-500/30 transition-all active:scale-[0.98]"
