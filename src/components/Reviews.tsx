@@ -13,9 +13,10 @@ import { QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
 
 interface ReviewsProps {
   recipeId: string;
+  canReview?: boolean;
 }
 
-export default function Reviews({ recipeId }: ReviewsProps) {
+export default function Reviews({ recipeId, canReview = false }: ReviewsProps) {
   const { user } = useAuth();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [userReview, setUserReview] = useState<Review | null>(null);
@@ -130,7 +131,7 @@ export default function Reviews({ recipeId }: ReviewsProps) {
       </h2>
 
       {/* Форма добавления отзыва */}
-      {user && !userReview && (
+      {canReview && user && !userReview && (
         <div className="mb-6 sm:mb-8">
           <textarea
             value={newReviewText}
@@ -152,19 +153,10 @@ export default function Reviews({ recipeId }: ReviewsProps) {
       )}
 
       {/* Сообщение если пользователь уже оставил отзыв */}
-      {user && userReview && (
+      {canReview && user && userReview && (
         <div className="mb-6 p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl">
           <p className="text-amber-400 text-sm">
             Вы уже оставили отзыв к этому курсу
-          </p>
-        </div>
-      )}
-
-      {/* Сообщение для незалогиненных */}
-      {!user && (
-        <div className="mb-6 p-4 bg-zinc-800/50 border border-zinc-700 rounded-xl">
-          <p className="text-zinc-400 text-sm">
-            Войдите, чтобы оставить отзыв
           </p>
         </div>
       )}

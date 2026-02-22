@@ -192,6 +192,9 @@ export default function RecipePage() {
               </div>
             </div>
           </div>
+
+          {/* Отзывы (только просмотр) */}
+          <Reviews recipeId={recipe.id} canReview={false} />
         </div>
       </div>
     );
@@ -314,6 +317,9 @@ export default function RecipePage() {
               )}
             </div>
           </div>
+
+          {/* Отзывы (только просмотр) */}
+          <Reviews recipeId={recipe.id} canReview={false} />
         </div>
       </div>
     );
@@ -442,7 +448,7 @@ export default function RecipePage() {
         )}
 
         {/* Отзывы */}
-        <Reviews recipeId={recipe.id} />
+        <Reviews recipeId={recipe.id} canReview={true} />
       </div>
     </div>
   );
