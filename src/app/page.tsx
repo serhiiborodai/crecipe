@@ -3,7 +3,7 @@
 import { useAuth } from '@/context/AuthContext';
 import { getPublishedRecipes, getSiteSettings, type Recipe, type SiteSettings } from '@/lib/firestore';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import GiftModal from '@/components/GiftModal';
 
@@ -65,7 +65,7 @@ const getYouTubeVideoId = (url: string) => {
   return match ? match[1] : null;
 };
 
-export default function Home() {
+function HomeContent() {
   const { user, loading: authLoading, isConfigured, signInWithGoogle, hasPurchased } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -476,5 +476,17 @@ export default function Home() {
         )}
 
         </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 }
