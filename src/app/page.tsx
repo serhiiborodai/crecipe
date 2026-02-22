@@ -150,11 +150,7 @@ function HomeContent() {
   };
 
   const handleRecipeClick = (recipeId: string) => {
-    if (user) {
-      router.push(`/recipes/${recipeId}`);
-    } else {
-      signInWithGoogle();
-    }
+    router.push(`/recipes/${recipeId}`);
   };
 
   const handleMainButtonClick = () => {
