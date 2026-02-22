@@ -187,7 +187,13 @@ export default function RecipePage() {
                     <div className="text-3xl font-bold text-amber-400 mb-1">
                       {formatPrice(recipe.price)}
                     </div>
-                    <p className="text-zinc-500 text-sm">Единоразовая оплата</p>
+                    <p className="text-zinc-500 text-sm mb-4">Единоразовая оплата</p>
+                    <button
+                      onClick={signInWithGoogle}
+                      className="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-zinc-900 font-bold rounded-xl transition-all"
+                    >
+                      Купить курс
+                    </button>
                   </div>
               </div>
             </div>
