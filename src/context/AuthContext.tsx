@@ -38,16 +38,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return ADMIN_EMAILS.includes(email.toLowerCase());
   };
 
-  const loadPurchases = async (userId: string) => {
-    if (!db) return;
+  const loadPurchases = async (userEmail: string) => {
+    if (!db || !userEmail) return;
+    
+    console.log('Загрузка покупок для:', userEmail.toLowerCase());
     
     try {
       const purchasesRef = collection(db, 'purchases');
-      const q = query(purchasesRef, where('userId', '==', userId));
+      // Ищем покупки по email получателя
+      const q = query(purchasesRef, where('recipientEmail', '==', userEmail.toLowerCase()));
       const querySnapshot = await getDocs(q);
+      
+      console.log('Найдено покупок:', querySnapshot.size);
       
       const purchasedRecipes: string[] = [];
       querySnapshot.forEach((doc) => {
+        console.log('Покупка:', doc.data());
         purchasedRecipes.push(doc.data().recipeId);
       });
       
@@ -58,8 +64,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const refreshPurchases = async () => {
-    if (user) {
-      await loadPurchases(user.uid);
+    if (user?.email) {
+      await loadPurchases(user.email);
     }
   };
 
@@ -90,7 +96,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             console.error('Ошибка сохранения пользователя:', error);
           }
           
-          await loadPurchases(user.uid);
+          // Загружаем покупки по email
+          if (user.email) {
+            await loadPurchases(user.email);
+          }
         }
       } else {
         setPurchases([]);

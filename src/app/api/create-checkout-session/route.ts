@@ -5,7 +5,17 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(request: Request) {
   try {
-    const { recipeId, recipeTitle, recipeDescription, price, userId, userEmail } = await request.json();
+    const { 
+      recipeId, 
+      recipeTitle, 
+      recipeDescription, 
+      price, 
+      userId, 
+      userEmail,
+      isGift,
+      recipientEmail,
+      isSelfGift,
+    } = await request.json();
 
     if (!recipeId || !userId || !price) {
       return NextResponse.json(
@@ -13,6 +23,23 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    // Для подарка требуется email получателя
+    if (isGift && !recipientEmail) {
+      return NextResponse.json(
+        { error: 'Не указан email получателя' },
+        { status: 400 }
+      );
+    }
+
+    // Определяем URL возврата
+    const successUrl = isGift 
+      ? `${process.env.NEXT_PUBLIC_BASE_URL}/?gift=success`
+      : `${process.env.NEXT_PUBLIC_BASE_URL}/recipes/${recipeId}?success=true`;
+    
+    const cancelUrl = isGift
+      ? `${process.env.NEXT_PUBLIC_BASE_URL}/?gift=canceled`
+      : `${process.env.NEXT_PUBLIC_BASE_URL}/recipes/${recipeId}?canceled=true`;
 
     // Создаём Stripe Checkout сессию
     const session = await stripe.checkout.sessions.create({
@@ -24,8 +51,10 @@ export async function POST(request: Request) {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: recipeTitle || 'Рецепт',
-              description: recipeDescription || undefined,
+              name: isGift ? `🎁 ${recipeTitle}` : recipeTitle || 'Рецепт',
+              description: isGift 
+                ? `Подарок для ${recipientEmail}`
+                : recipeDescription || undefined,
             },
             unit_amount: price,
           },
@@ -34,13 +63,16 @@ export async function POST(request: Request) {
       ],
       metadata: {
         recipeId,
-        userId,
+        purchasedByUserId: userId,
+        purchasedByEmail: userEmail,
+        isGift: isGift ? 'true' : 'false',
+        recipientEmail: isGift ? recipientEmail : userEmail,
+        isSelfGift: isSelfGift ? 'true' : 'false',
       },
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/recipes/${recipeId}?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/recipes/${recipeId}?canceled=true`,
+      success_url: successUrl,
+      cancel_url: cancelUrl,
     });
 
-    // Возвращаем URL для редиректа (новый метод)
     return NextResponse.json({ url: session.url });
   } catch (error) {
     console.error('Ошибка создания checkout сессии:', error);

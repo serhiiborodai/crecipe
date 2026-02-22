@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { initializeApp, getApps, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getAuth } from 'firebase-admin/auth';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -17,6 +18,7 @@ if (getApps().length === 0) {
 }
 
 const adminDb = getFirestore();
+const adminAuth = getAuth();
 
 export async function POST(request: Request) {
   const body = await request.text();
@@ -49,21 +51,43 @@ export async function POST(request: Request) {
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session;
     
-    const { recipeId, userId } = session.metadata || {};
+    const { 
+      recipeId, 
+      purchasedByUserId,
+      purchasedByEmail,
+      isGift,
+      recipientEmail,
+      isSelfGift,
+    } = session.metadata || {};
 
-    if (recipeId && userId) {
+    if (recipeId && recipientEmail) {
       try {
+        // Пытаемся найти userId получателя по email
+        let recipientUserId: string | null = null;
+        try {
+          const userRecord = await adminAuth.getUserByEmail(recipientEmail);
+          recipientUserId = userRecord.uid;
+        } catch {
+          // Пользователь не найден — это нормально для подарков новым пользователям
+          console.log(`Пользователь ${recipientEmail} ещё не зарегистрирован`);
+        }
+
         // Записываем покупку в Firestore
         await adminDb.collection('purchases').add({
-          userId,
+          recipientEmail,
+          recipientUserId,
           recipeId,
+          purchasedByUserId: purchasedByUserId || null,
+          purchasedByEmail: purchasedByEmail || null,
+          isGift: isGift === 'true',
+          isSelfGift: isSelfGift === 'true',
           purchasedAt: new Date(),
           stripeSessionId: session.id,
           amount: session.amount_total,
           currency: session.currency,
         });
 
-        console.log(`Покупка записана: user ${userId}, recipe ${recipeId}`);
+        console.log(`Покупка записана: recipient ${recipientEmail}, recipe ${recipeId}, isGift: ${isGift}`);
       } catch (error) {
         console.error('Ошибка записи покупки:', error);
         return NextResponse.json(

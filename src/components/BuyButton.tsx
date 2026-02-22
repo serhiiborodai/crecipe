@@ -38,6 +38,9 @@ export default function BuyButton({ recipe }: BuyButtonProps) {
           price: recipe.price,
           userId: user.uid,
           userEmail: user.email,
+          isGift: false,
+          recipientEmail: user.email,
+          isSelfGift: false,
         }),
       });
 

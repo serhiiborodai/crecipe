@@ -4,7 +4,8 @@ import { useAuth } from '@/context/AuthContext';
 import { getPublishedRecipes, getSiteSettings, type Recipe, type SiteSettings } from '@/lib/firestore';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import GiftModal from '@/components/GiftModal';
 
 // Компонент FAQ аккордеон
 function FaqAccordion({ faq }: { faq: { question: string; answer: string }[] }) {
@@ -65,15 +66,28 @@ const getYouTubeVideoId = (url: string) => {
 };
 
 export default function Home() {
-  const { user, loading: authLoading, isConfigured, signInWithGoogle } = useAuth();
+  const { user, loading: authLoading, isConfigured, signInWithGoogle, hasPurchased } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [loading, setLoading] = useState(true);
+  const [giftModalOpen, setGiftModalOpen] = useState(false);
+  const [giftSuccessOpen, setGiftSuccessOpen] = useState(false);
+  const [buyingRecipeId, setBuyingRecipeId] = useState<string | null>(null);
 
   useEffect(() => {
     loadData();
   }, []);
+
+  // Проверяем параметр ?gift=success
+  useEffect(() => {
+    if (searchParams.get('gift') === 'success') {
+      setGiftSuccessOpen(true);
+      // Убираем параметр из URL
+      router.replace('/', { scroll: false });
+    }
+  }, [searchParams, router]);
 
   const loadData = async () => {
     try {
@@ -102,6 +116,38 @@ export default function Home() {
       }
     }
   }, [loading, authLoading]);
+
+  const handleBuyRecipe = async (e: React.MouseEvent, recipe: Recipe) => {
+    e.stopPropagation();
+    if (!user || buyingRecipeId) return;
+
+    setBuyingRecipeId(recipe.id);
+    try {
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          recipeId: recipe.id,
+          recipeTitle: recipe.title,
+          price: recipe.price,
+          userId: user.uid,
+          userEmail: user.email,
+          isGift: false,
+          recipientEmail: user.email,
+          isSelfGift: false,
+        }),
+      });
+
+      const { url, error } = await response.json();
+      if (error) throw new Error(error);
+      if (url) window.location.href = url;
+    } catch (err) {
+      console.error('Ошибка при создании сессии оплаты:', err);
+      alert('Ошибка при создании сессии оплаты');
+    } finally {
+      setBuyingRecipeId(null);
+    }
+  };
 
   const handleRecipeClick = (recipeId: string) => {
     if (user) {
@@ -151,7 +197,7 @@ export default function Home() {
         </div>
 
         {/* Hero секция */}
-        <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-20 px-4 sm:px-6">
+        <section className="relative pt-12 sm:pt-16 pb-16 sm:pb-20 px-4 sm:px-6">
           <div className="max-w-5xl mx-auto text-center">
             {/* YouTube видео или декоративные эмодзи */}
             {settings?.heroYoutubeUrl && getYouTubeVideoId(settings.heroYoutubeUrl) ? (
@@ -176,7 +222,7 @@ export default function Home() {
               </div>
             )}
 
-            <h1 className="font-display text-3xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 opacity-0 animate-fade-in delay-100 px-2">
+            <h1 className="font-display text-3xl sm:text-4xl md:text-[48px] font-bold mb-4 sm:mb-6 opacity-0 animate-fade-in delay-100 px-2">
               {settings?.heroTitle?.split(' ').slice(0, -1).join(' ')}{' '}
               <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-400 bg-clip-text text-transparent">
                 {settings?.heroTitle?.split(' ').slice(-1)[0] || 'профессионал'}
@@ -223,15 +269,25 @@ export default function Home() {
                 </button>
               )}
 
-              <a
-                href="#preview"
-                className="px-6 sm:px-8 py-3.5 sm:py-4 border-2 border-zinc-700 hover:border-zinc-600 text-white font-semibold text-base sm:text-lg rounded-xl transition-all duration-300 hover:bg-zinc-800/50 flex items-center justify-center gap-2"
-              >
-                Посмотреть рецепты
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </a>
+              {user ? (
+                <button
+                  onClick={() => setGiftModalOpen(true)}
+                  className="px-6 sm:px-8 py-3.5 sm:py-4 border-2 border-zinc-700 hover:border-amber-500/50 text-white font-semibold text-base sm:text-lg rounded-xl transition-all duration-300 hover:bg-zinc-800/50 flex items-center justify-center gap-2"
+                >
+                  <span>🎁</span>
+                  Подарить рецепт
+                </button>
+              ) : (
+                <a
+                  href="#preview"
+                  className="px-6 sm:px-8 py-3.5 sm:py-4 border-2 border-zinc-700 hover:border-zinc-600 text-white font-semibold text-base sm:text-lg rounded-xl transition-all duration-300 hover:bg-zinc-800/50 flex items-center justify-center gap-2"
+                >
+                  Посмотреть рецепты
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </a>
+              )}
             </div>
           </div>
         </section>
@@ -241,7 +297,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-10 sm:mb-16">
               <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
-                Новые <span className="text-amber-400">рецепты</span>
+                Новые <span className="text-amber-400">курсы</span>
               </h2>
               <p className="text-zinc-400 text-sm sm:text-lg max-w-2xl mx-auto px-2">
                 {user 
@@ -261,13 +317,21 @@ export default function Home() {
                   onClick={() => handleRecipeClick(recipe.id)}
                 >
                   <div className="relative h-40 sm:h-56 bg-gradient-to-br from-zinc-800 to-zinc-900 overflow-hidden">
-                    <div className="absolute inset-0 flex items-center justify-center text-5xl sm:text-6xl opacity-30">
-                      {recipe.category === 'Мясо' && '🥩'}
-                      {recipe.category === 'Паста' && '🍝'}
-                      {recipe.category === 'Десерты' && '🍮'}
-                      {recipe.category === 'Японская кухня' && '🍣'}
-                      {!recipe.category && '🍽️'}
-                    </div>
+                    {recipe.coverImage ? (
+                      <img 
+                        src={recipe.coverImage} 
+                        alt={recipe.title}
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center text-5xl sm:text-6xl opacity-30">
+                        {recipe.category === 'Мясо' && '🥩'}
+                        {recipe.category === 'Паста' && '🍝'}
+                        {recipe.category === 'Десерты' && '🍮'}
+                        {recipe.category === 'Японская кухня' && '🍣'}
+                        {!recipe.category && '🍽️'}
+                      </div>
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent" />
                     <div className="absolute inset-0 bg-zinc-900/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <span className="text-white font-semibold flex items-center gap-2 text-sm sm:text-base">
@@ -299,6 +363,24 @@ export default function Home() {
                       </span>
                       <span className="text-zinc-500 text-xs sm:text-sm">{recipe.videos.length} видео</span>
                     </div>
+                    {/* Кнопка купить */}
+                    {user && !hasPurchased(recipe.id) && (
+                      <button
+                        onClick={(e) => handleBuyRecipe(e, recipe)}
+                        disabled={buyingRecipeId === recipe.id}
+                        className="mt-3 sm:mt-4 w-full py-2 sm:py-2.5 bg-amber-500 hover:bg-amber-400 disabled:bg-amber-500/50 text-zinc-900 text-xs sm:text-sm font-bold rounded-lg transition-colors"
+                      >
+                        {buyingRecipeId === recipe.id ? 'Загрузка...' : `Купить за ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(recipe.price / 100)}`}
+                      </button>
+                    )}
+                    {user && hasPurchased(recipe.id) && (
+                      <div className="mt-3 sm:mt-4 w-full py-2 sm:py-2.5 bg-emerald-500/20 text-emerald-400 text-xs sm:text-sm font-medium rounded-lg text-center flex items-center justify-center gap-1.5">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        Куплено
+                      </div>
+                    )}
                   </div>
                 </article>
               ))}
@@ -342,6 +424,35 @@ export default function Home() {
         {/* FAQ */}
         {settings?.faq && settings.faq.length > 0 && (
           <FaqAccordion faq={settings.faq} />
+        )}
+
+        {/* Gift Modal */}
+        <GiftModal 
+          isOpen={giftModalOpen} 
+          onClose={() => setGiftModalOpen(false)} 
+        />
+
+        {/* Gift Success Popup */}
+        {giftSuccessOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div 
+              className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+              onClick={() => setGiftSuccessOpen(false)}
+            />
+            <div className="relative bg-zinc-900 rounded-2xl border border-zinc-800 p-8 max-w-md text-center">
+              <div className="text-6xl mb-4">🎉</div>
+              <h2 className="text-2xl font-bold text-white mb-2">Подарок отправлен!</h2>
+              <p className="text-zinc-400 mb-6">
+                Рецепт успешно куплен и подарен. Получатель сможет посмотреть его после входа в свой Google аккаунт.
+              </p>
+              <button
+                onClick={() => setGiftSuccessOpen(false)}
+                className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-zinc-900 font-bold rounded-xl transition-all"
+              >
+                Отлично!
+              </button>
+            </div>
+          </div>
         )}
 
         </div>

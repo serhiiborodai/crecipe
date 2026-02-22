@@ -3,12 +3,10 @@
 import { useAuth } from '@/context/AuthContext';
 import { getPublishedRecipes, getSiteSettings, type Recipe, type SiteSettings } from '@/lib/firestore';
 import RecipeCard from '@/components/RecipeCard';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState, useMemo } from 'react';
 
 export default function RecipesPage() {
   const { user, loading: authLoading, purchases, isAdmin } = useAuth();
-  const router = useRouter();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [loading, setLoading] = useState(true);
@@ -21,11 +19,6 @@ export default function RecipesPage() {
   // Пагинация
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    if (!authLoading && !user) {
-      router.push('/');
-    }
-  }, [user, authLoading, router]);
 
   useEffect(() => {
     loadData();
@@ -102,9 +95,6 @@ export default function RecipesPage() {
     );
   }
 
-  if (!user) {
-    return null;
-  }
 
   const purchasedCount = isAdmin ? recipes.length : recipes.filter(r => purchases.includes(r.id)).length;
   const notPurchasedCount = isAdmin ? 0 : recipes.length - purchasedCount;
@@ -120,9 +110,11 @@ export default function RecipesPage() {
           <p className="text-zinc-400 text-sm sm:text-lg">
             {isAdmin 
               ? `Вы админ — у вас доступ ко всем ${recipes.length} рецептам`
-              : purchasedCount > 0 
-                ? `У вас ${purchasedCount} из ${recipes.length} рецептов`
-                : 'Выберите рецепт, который хотите изучить'
+              : user
+                ? purchasedCount > 0 
+                  ? `У вас ${purchasedCount} из ${recipes.length} рецептов`
+                  : 'Выберите рецепт, который хотите изучить'
+                : `${recipes.length} курсов доступно для изучения`
             }
           </p>
         </div>
@@ -156,50 +148,52 @@ export default function RecipesPage() {
           </div>
         </div>
 
-        {/* Фильтры по покупке */}
-        <div className="flex flex-wrap gap-2 sm:gap-3 mb-4 sm:mb-6">
-          <button
-            onClick={() => setPurchaseFilter('all')}
-            className={`px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all ${
-              purchaseFilter === 'all'
-                ? 'bg-amber-500 text-zinc-900'
-                : 'bg-zinc-800/50 text-zinc-300 hover:bg-zinc-800'
-            }`}
-          >
-            Все ({recipes.length})
-          </button>
-          <button
-            onClick={() => setPurchaseFilter('purchased')}
-            className={`px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all flex items-center gap-1.5 sm:gap-2 ${
-              purchaseFilter === 'purchased'
-                ? 'bg-emerald-500 text-white'
-                : 'bg-zinc-800/50 text-zinc-300 hover:bg-zinc-800'
-            }`}
-          >
-            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-            <span className="hidden sm:inline">{isAdmin ? 'Доступно' : 'Куплено'}</span>
-            <span className="sm:hidden">✓</span>
-            ({purchasedCount})
-          </button>
-          {!isAdmin && (
+        {/* Фильтры по покупке (только для залогиненных) */}
+        {user && (
+          <div className="flex flex-wrap gap-2 sm:gap-3 mb-4 sm:mb-6">
             <button
-              onClick={() => setPurchaseFilter('not_purchased')}
+              onClick={() => setPurchaseFilter('all')}
+              className={`px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all ${
+                purchaseFilter === 'all'
+                  ? 'bg-amber-500 text-zinc-900'
+                  : 'bg-zinc-800/50 text-zinc-300 hover:bg-zinc-800'
+              }`}
+            >
+              Все ({recipes.length})
+            </button>
+            <button
+              onClick={() => setPurchaseFilter('purchased')}
               className={`px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all flex items-center gap-1.5 sm:gap-2 ${
-                purchaseFilter === 'not_purchased'
-                  ? 'bg-zinc-600 text-white'
+                purchaseFilter === 'purchased'
+                  ? 'bg-emerald-500 text-white'
                   : 'bg-zinc-800/50 text-zinc-300 hover:bg-zinc-800'
               }`}
             >
               <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
-              <span className="hidden sm:inline">Купить</span>
-              ({notPurchasedCount})
+              <span className="hidden sm:inline">{isAdmin ? 'Доступно' : 'Куплено'}</span>
+              <span className="sm:hidden">✓</span>
+              ({purchasedCount})
             </button>
-          )}
-        </div>
+            {!isAdmin && (
+              <button
+                onClick={() => setPurchaseFilter('not_purchased')}
+                className={`px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all flex items-center gap-1.5 sm:gap-2 ${
+                  purchaseFilter === 'not_purchased'
+                    ? 'bg-zinc-600 text-white'
+                    : 'bg-zinc-800/50 text-zinc-300 hover:bg-zinc-800'
+                }`}
+              >
+                <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span className="hidden sm:inline">Купить</span>
+                ({notPurchasedCount})
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Фильтр по категориям */}
         {availableCategories.length > 0 && (

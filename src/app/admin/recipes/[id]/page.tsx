@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { getRecipeById, saveRecipe, getSiteSettings, type Recipe, type RecipeVideo } from '@/lib/firestore';
+import { uploadImage } from '@/lib/firebase';
 
 const DIFFICULTIES = [
   { value: 'easy', label: 'Легко' },
@@ -22,7 +23,9 @@ export default function RecipeEditorPage() {
   
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [categories, setCategories] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [recipe, setRecipe] = useState<Recipe>({
     id: generateId(),
     title: '',
@@ -119,6 +122,32 @@ export default function RecipeEditorPage() {
     const newIndex = direction === 'up' ? index - 1 : index + 1;
     [newVideos[index], newVideos[newIndex]] = [newVideos[newIndex], newVideos[index]];
     setRecipe({ ...recipe, videos: newVideos });
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Выберите изображение');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Файл слишком большой (макс. 5MB)');
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const path = `covers/${recipe.id}_${Date.now()}.${file.name.split('.').pop()}`;
+      const url = await uploadImage(file, path);
+      setRecipe({ ...recipe, coverImage: url });
+    } catch (error) {
+      console.error('Ошибка загрузки:', error);
+      alert('Ошибка загрузки изображения');
+    }
+    setUploading(false);
   };
 
   if (loading) {
@@ -254,6 +283,55 @@ export default function RecipeEditorPage() {
                   min="0"
                   step="1"
                 />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-zinc-400 text-sm mb-2">Обложка</label>
+              
+              <div className="flex gap-4 items-start">
+                {/* Превью */}
+                <div className="relative w-40 h-24 rounded-lg overflow-hidden bg-zinc-800 flex-shrink-0">
+                  {recipe.coverImage ? (
+                    <>
+                      <img 
+                        src={recipe.coverImage} 
+                        alt="Превью" 
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        onClick={() => setRecipe({ ...recipe, coverImage: '' })}
+                        className="absolute top-1 right-1 w-6 h-6 bg-red-500 hover:bg-red-400 rounded-full flex items-center justify-center text-white text-xs"
+                      >
+                        ✕
+                      </button>
+                    </>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-zinc-600 text-3xl">
+                      🖼️
+                    </div>
+                  )}
+                </div>
+
+                {/* Кнопки */}
+                <div className="flex flex-col gap-2">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploading}
+                    className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-zinc-900 font-medium rounded-lg transition-colors disabled:opacity-50"
+                  >
+                    {uploading ? 'Загрузка...' : '📷 Загрузить фото'}
+                  </button>
+                  <span className="text-zinc-500 text-xs">JPG, PNG до 5MB</span>
+                </div>
               </div>
             </div>
 

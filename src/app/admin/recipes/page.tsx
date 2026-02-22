@@ -88,12 +88,18 @@ export default function AdminRecipesPage() {
                   <tr key={recipe.id} className="border-t border-zinc-800 hover:bg-zinc-800/30">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center text-2xl">
-                          {recipe.category === 'Мясо' && '🥩'}
-                          {recipe.category === 'Паста' && '🍝'}
-                          {recipe.category === 'Десерты' && '🍮'}
-                          {recipe.category === 'Японская кухня' && '🍣'}
-                          {!recipe.category && '🍽️'}
+                        <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center text-2xl overflow-hidden flex-shrink-0">
+                          {recipe.coverImage ? (
+                            <img src={recipe.coverImage} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <>
+                              {recipe.category === 'Мясо' && '🥩'}
+                              {recipe.category === 'Паста' && '🍝'}
+                              {recipe.category === 'Десерты' && '🍮'}
+                              {recipe.category === 'Японская кухня' && '🍣'}
+                              {!recipe.category && '🍽️'}
+                            </>
+                          )}
                         </div>
                         <div>
                           <div className="text-white font-medium">{recipe.title}</div>
@@ -160,14 +166,20 @@ export default function AdminRecipesPage() {
                 className="bg-zinc-900 rounded-xl border border-zinc-800 p-4 hover:border-zinc-700 transition-colors"
               >
                 {/* Заголовок и статус */}
-                <div className="flex items-start justify-between gap-3 mb-3">
+                  <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-10 h-10 rounded-lg bg-zinc-800 flex items-center justify-center text-xl flex-shrink-0">
-                      {recipe.category === 'Мясо' && '🥩'}
-                      {recipe.category === 'Паста' && '🍝'}
-                      {recipe.category === 'Десерты' && '🍮'}
-                      {recipe.category === 'Японская кухня' && '🍣'}
-                      {!recipe.category && '🍽️'}
+                    <div className="w-10 h-10 rounded-lg bg-zinc-800 flex items-center justify-center text-xl flex-shrink-0 overflow-hidden">
+                      {recipe.coverImage ? (
+                        <img src={recipe.coverImage} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <>
+                          {recipe.category === 'Мясо' && '🥩'}
+                          {recipe.category === 'Паста' && '🍝'}
+                          {recipe.category === 'Десерты' && '🍮'}
+                          {recipe.category === 'Японская кухня' && '🍣'}
+                          {!recipe.category && '🍽️'}
+                        </>
+                      )}
                     </div>
                     <div className="min-w-0">
                       <div className="text-white font-medium text-sm truncate">{recipe.title}</div>

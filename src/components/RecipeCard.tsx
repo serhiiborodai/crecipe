@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { type Recipe } from '@/lib/firestore';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
@@ -9,7 +10,8 @@ interface RecipeCardProps {
 }
 
 export default function RecipeCard({ recipe }: RecipeCardProps) {
-  const { hasPurchased } = useAuth();
+  const { user, hasPurchased } = useAuth();
+  const [loading, setLoading] = useState(false);
   const isPurchased = hasPurchased(recipe.id);
 
   const formatPrice = (price: number) => {
@@ -49,15 +51,57 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
 
   const difficulty = getDifficultyLabel(recipe.difficulty);
 
+  const handleBuy = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!user || loading) return;
+
+    setLoading(true);
+    try {
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          recipeId: recipe.id,
+          recipeTitle: recipe.title,
+          price: recipe.price,
+          userId: user.uid,
+          userEmail: user.email,
+          isGift: false,
+          recipientEmail: user.email,
+          isSelfGift: false,
+        }),
+      });
+
+      const { url, error } = await response.json();
+      if (error) throw new Error(error);
+      if (url) window.location.href = url;
+    } catch (err) {
+      console.error('Ошибка при создании сессии оплаты:', err);
+      alert('Ошибка при создании сессии оплаты');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Link href={`/recipes/${recipe.id}`}>
       <article className="group relative bg-zinc-900/50 rounded-xl sm:rounded-2xl overflow-hidden border border-zinc-800/50 hover:border-amber-500/30 transition-all duration-500 hover:shadow-2xl hover:shadow-amber-500/5 active:scale-[0.98]">
         {/* Обложка */}
         <div className="relative h-32 sm:h-56 bg-gradient-to-br from-zinc-800 to-zinc-900 overflow-hidden">
-          {/* Placeholder для изображения */}
-          <div className="absolute inset-0 flex items-center justify-center text-4xl sm:text-6xl opacity-30 group-hover:scale-110 transition-transform duration-700">
-            {getCategoryEmoji(recipe.category)}
-          </div>
+          {/* Изображение или placeholder */}
+          {recipe.coverImage ? (
+            <img 
+              src={recipe.coverImage} 
+              alt={recipe.title}
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center text-4xl sm:text-6xl opacity-30 group-hover:scale-110 transition-transform duration-700">
+              {getCategoryEmoji(recipe.category)}
+            </div>
+          )}
           
           {/* Градиент */}
           <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent" />
@@ -126,6 +170,17 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
               {recipe.videos.length}
             </span>
           </div>
+
+          {/* Кнопка купить */}
+          {user && !isPurchased && (
+            <button
+              onClick={handleBuy}
+              disabled={loading}
+              className="mt-3 sm:mt-4 w-full py-2 sm:py-2.5 bg-amber-500 hover:bg-amber-400 disabled:bg-amber-500/50 text-zinc-900 text-xs sm:text-sm font-bold rounded-lg transition-colors"
+            >
+              {loading ? 'Загрузка...' : `Купить за ${formatPrice(recipe.price)}`}
+            </button>
+          )}
         </div>
 
         {/* Hover эффект */}

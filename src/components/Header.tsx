@@ -46,14 +46,12 @@ export default function Header() {
 
           {/* Desktop навигация */}
           <div className="hidden md:flex items-center gap-6">
-            {user && (
-              <Link
-                href="/recipes"
-                className="text-zinc-400 hover:text-white transition-colors font-medium"
-              >
-                Каталог
-              </Link>
-            )}
+            <Link
+              href="/recipes"
+              className="text-zinc-400 hover:text-white transition-colors font-medium"
+            >
+              Каталог
+            </Link>
 
             <a
               href="/#faq"
@@ -176,29 +174,31 @@ export default function Header() {
         >
           <nav className="p-4 space-y-2">
             {user && (
+              <div className="px-4 py-3 border-b border-zinc-800 mb-2">
+                <p className="text-white font-medium">{user.displayName}</p>
+                <p className="text-zinc-500 text-sm">{user.email}</p>
+              </div>
+            )}
+
+            <Link
+              href="/recipes"
+              className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
+            >
+              <span className="text-xl">📖</span>
+              Каталог курсов
+            </Link>
+
+            <a
+              href="/#faq"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
+            >
+              <span className="text-xl">❓</span>
+              FAQ
+            </a>
+
+            {user && (
               <>
-                <div className="px-4 py-3 border-b border-zinc-800 mb-2">
-                  <p className="text-white font-medium">{user.displayName}</p>
-                  <p className="text-zinc-500 text-sm">{user.email}</p>
-                </div>
-
-                <Link
-                  href="/recipes"
-                  className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
-                >
-                  <span className="text-xl">📖</span>
-                  Каталог рецептов
-                </Link>
-
-                <a
-                  href="/#faq"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
-                >
-                  <span className="text-xl">❓</span>
-                  FAQ
-                </a>
-
                 {isAdmin && (
                   <Link
                     href="/admin"
