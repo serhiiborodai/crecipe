@@ -122,7 +122,7 @@ export default function RecipePage() {
                   <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
                     <iframe
                       className="absolute inset-0 w-full h-full"
-                      src={`https://www.youtube.com/embed/${getYouTubeVideoId(recipe.youtubePromoUrl)}?autoplay=1&mute=1&rel=0&modestbranding=1`}
+                      src={`https://www.youtube.com/embed/${getYouTubeVideoId(recipe.youtubePromoUrl)}?autoplay=1&mute=1&loop=1&playlist=${getYouTubeVideoId(recipe.youtubePromoUrl)}&rel=0&modestbranding=1`}
                       title="Промо видео"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
@@ -252,7 +252,7 @@ export default function RecipePage() {
                   <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
                     <iframe
                       className="absolute inset-0 w-full h-full"
-                      src={`https://www.youtube.com/embed/${getYouTubeVideoId(recipe.youtubePromoUrl)}?autoplay=1&mute=1&rel=0&modestbranding=1`}
+                      src={`https://www.youtube.com/embed/${getYouTubeVideoId(recipe.youtubePromoUrl)}?autoplay=1&mute=1&loop=1&playlist=${getYouTubeVideoId(recipe.youtubePromoUrl)}&rel=0&modestbranding=1`}
                       title="Промо видео"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
