@@ -156,7 +156,7 @@ body {
 
 @media (max-width: 639px) {
   .site-logo__image {
-    max-height: 140px;
+    max-height: 100px;
     margin-left: -60px;
   }
 }
