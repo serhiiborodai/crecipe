@@ -217,6 +217,11 @@ STRIPE_WEBHOOK_SECRET
 NEXT_PUBLIC_ADMIN_EMAILS=email1@gmail.com,email2@gmail.com
 ```
 
+**VIP (доступ ко всем курсам без админки):**
+```
+NEXT_PUBLIC_VIP_EMAILS=vip1@gmail.com,vip2@gmail.com
+```
+
 > ⚠️ **FIREBASE_PRIVATE_KEY** — при вставке замените `\n` на реальные переносы строк, или оберните значение в двойные кавычки.
 
 ### 3.3. Подключение домена

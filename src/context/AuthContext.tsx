@@ -13,11 +13,15 @@ import { doc, setDoc, collection, query, where, getDocs } from 'firebase/firesto
 // Админские email из переменных окружения
 const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
 
+// VIP email — доступ ко всем курсам, но без админки
+const VIP_EMAILS = (process.env.NEXT_PUBLIC_VIP_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
+
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   purchases: string[];
   isAdmin: boolean;
+  isVip: boolean;
   isConfigured: boolean; // Firebase настроен?
   signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
@@ -32,10 +36,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [purchases, setPurchases] = useState<string[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isVip, setIsVip] = useState(false);
 
   const checkIsAdmin = (email: string | null): boolean => {
     if (!email) return false;
     return ADMIN_EMAILS.includes(email.toLowerCase());
+  };
+
+  const checkIsVip = (email: string | null): boolean => {
+    if (!email) return false;
+    return VIP_EMAILS.includes(email.toLowerCase());
   };
 
   const loadPurchases = async (userEmail: string) => {
@@ -82,6 +92,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       if (user) {
         setIsAdmin(checkIsAdmin(user.email));
+        setIsVip(checkIsVip(user.email));
         
         if (db) {
           try {
@@ -104,6 +115,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         setPurchases([]);
         setIsAdmin(false);
+        setIsVip(false);
       }
       
       setLoading(false);
@@ -133,6 +145,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await signOut(auth);
       setPurchases([]);
       setIsAdmin(false);
+      setIsVip(false);
     } catch (error) {
       console.error('Ошибка выхода:', error);
       throw error;
@@ -140,8 +153,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const hasPurchased = (recipeId: string): boolean => {
-    // Админ имеет доступ ко всем рецептам
-    if (isAdmin) return true;
+    // Админ и VIP имеют доступ ко всем рецептам
+    if (isAdmin || isVip) return true;
     return purchases.includes(recipeId);
   };
 
@@ -152,6 +165,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         loading,
         purchases,
         isAdmin,
+        isVip,
         isConfigured: isFirebaseConfigured,
         signInWithGoogle,
         logout,
