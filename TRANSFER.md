@@ -63,6 +63,16 @@ service cloud.firestore {
                     resource.data.recipientEmail == request.auth.token.email;
       allow write: if false;
     }
+    
+    // Отзывы - читать могут все, создавать/удалять - авторизованные (свои)
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if request.auth != null && 
+                      request.resource.data.userId == request.auth.uid;
+      allow delete: if request.auth != null && 
+                      resource.data.userId == request.auth.uid;
+      allow update: if false;
+    }
   }
 }
 ```

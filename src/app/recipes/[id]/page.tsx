@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import VimeoPlayer from '@/components/VimeoPlayer';
 import BuyButton from '@/components/BuyButton';
+import Reviews from '@/components/Reviews';
 import Link from 'next/link';
 
 export default function RecipePage() {
@@ -439,6 +440,9 @@ export default function RecipePage() {
             </a>
           </div>
         )}
+
+        {/* Отзывы */}
+        <Reviews recipeId={recipe.id} />
       </div>
     </div>
   );

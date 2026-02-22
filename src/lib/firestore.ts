@@ -6,8 +6,14 @@ import {
   getDoc,
   setDoc,
   deleteDoc,
+  addDoc,
   query,
   orderBy,
+  where,
+  limit,
+  startAfter,
+  QueryDocumentSnapshot,
+  DocumentData,
 } from 'firebase/firestore';
 
 // ==================== ТИПЫ ====================
@@ -59,6 +65,17 @@ export interface SiteSettings {
   faq: FaqItem[];
   categories: string[];
   recipesPerPage: number;
+}
+
+export interface Review {
+  id: string;
+  recipeId: string;
+  userId: string;
+  userEmail: string;
+  userName: string;
+  userPhoto?: string;
+  text: string;
+  createdAt: Date;
 }
 
 // ==================== ДЕМО-ДАННЫЕ ====================
@@ -304,4 +321,121 @@ export async function saveSiteSettings(settings: Partial<SiteSettings>): Promise
 export async function initializeDemoData(): Promise<void> {
   // Теперь демо-данные возвращаются автоматически если Firebase не настроен
   // или если база пустая
+}
+
+// ==================== ОТЗЫВЫ ====================
+
+const REVIEWS_COLLECTION = 'reviews';
+
+export async function getReviewsForRecipe(
+  recipeId: string,
+  pageSize: number = 10,
+  lastDoc?: QueryDocumentSnapshot<DocumentData>
+): Promise<{ reviews: Review[]; lastDoc: QueryDocumentSnapshot<DocumentData> | null; hasMore: boolean }> {
+  if (!isFirebaseConfigured || !db) {
+    return { reviews: [], lastDoc: null, hasMore: false };
+  }
+
+  try {
+    const reviewsRef = collection(db, REVIEWS_COLLECTION);
+    let q = query(
+      reviewsRef,
+      where('recipeId', '==', recipeId),
+      orderBy('createdAt', 'desc'),
+      limit(pageSize + 1)
+    );
+
+    if (lastDoc) {
+      q = query(
+        reviewsRef,
+        where('recipeId', '==', recipeId),
+        orderBy('createdAt', 'desc'),
+        startAfter(lastDoc),
+        limit(pageSize + 1)
+      );
+    }
+
+    const snapshot = await getDocs(q);
+    const docs = snapshot.docs;
+    const hasMore = docs.length > pageSize;
+    const reviewDocs = hasMore ? docs.slice(0, pageSize) : docs;
+
+    const reviews = reviewDocs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      createdAt: doc.data().createdAt?.toDate() || new Date(),
+    })) as Review[];
+
+    return {
+      reviews,
+      lastDoc: reviewDocs.length > 0 ? reviewDocs[reviewDocs.length - 1] : null,
+      hasMore,
+    };
+  } catch (error) {
+    console.error('Ошибка получения отзывов:', error);
+    return { reviews: [], lastDoc: null, hasMore: false };
+  }
+}
+
+export async function getUserReviewForRecipe(recipeId: string, userId: string): Promise<Review | null> {
+  if (!isFirebaseConfigured || !db) {
+    return null;
+  }
+
+  try {
+    const reviewsRef = collection(db, REVIEWS_COLLECTION);
+    const q = query(
+      reviewsRef,
+      where('recipeId', '==', recipeId),
+      where('userId', '==', userId),
+      limit(1)
+    );
+
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) {
+      return null;
+    }
+
+    const doc = snapshot.docs[0];
+    return {
+      id: doc.id,
+      ...doc.data(),
+      createdAt: doc.data().createdAt?.toDate() || new Date(),
+    } as Review;
+  } catch (error) {
+    console.error('Ошибка получения отзыва пользователя:', error);
+    return null;
+  }
+}
+
+export async function addReview(review: Omit<Review, 'id' | 'createdAt'>): Promise<string> {
+  if (!isFirebaseConfigured || !db) {
+    throw new Error('Firebase не настроен');
+  }
+
+  try {
+    const reviewsRef = collection(db, REVIEWS_COLLECTION);
+    const docRef = await addDoc(reviewsRef, {
+      ...review,
+      createdAt: new Date(),
+    });
+    return docRef.id;
+  } catch (error) {
+    console.error('Ошибка добавления отзыва:', error);
+    throw error;
+  }
+}
+
+export async function deleteReview(reviewId: string): Promise<void> {
+  if (!isFirebaseConfigured || !db) {
+    throw new Error('Firebase не настроен');
+  }
+
+  try {
+    const docRef = doc(db, REVIEWS_COLLECTION, reviewId);
+    await deleteDoc(docRef);
+  } catch (error) {
+    console.error('Ошибка удаления отзыва:', error);
+    throw error;
+  }
 }
