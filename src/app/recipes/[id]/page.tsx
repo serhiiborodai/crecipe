@@ -416,6 +416,29 @@ export default function RecipePage() {
             </div>
           </div>
         )}
+
+        {/* Ссылка на Google документ */}
+        {recipe.googleDocUrl && (
+          <div className="mt-8 sm:mt-12">
+            <a
+              href={recipe.googleDocUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-3 w-full p-5 sm:p-6 bg-blue-600 hover:bg-blue-500 rounded-xl sm:rounded-2xl transition-colors group"
+            >
+              <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM6 20V4h6v6h6v10H6z"/>
+                <path d="M8 12h8v2H8zm0 4h8v2H8z"/>
+              </svg>
+              <span className="text-lg sm:text-xl font-bold text-white group-hover:underline">
+                Читать документ
+              </span>
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );

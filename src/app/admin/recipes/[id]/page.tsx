@@ -41,6 +41,7 @@ export default function RecipeEditorPage() {
     category: '',
     order: 0,
     isPublished: false,
+    googleDocUrl: '',
   });
 
   useEffect(() => {
@@ -443,6 +444,27 @@ export default function RecipeEditorPage() {
             <p className="text-zinc-500 text-sm">
               Откройте видео на Vimeo, скопируйте URL. ID — это число в конце: <br />
               <code className="text-amber-400">https://vimeo.com/<strong>76979871</strong></code> → ID: <strong>76979871</strong>
+            </p>
+          </div>
+        </section>
+
+        {/* Google документ */}
+        <section className="bg-zinc-900/50 rounded-xl p-6 border border-zinc-800">
+          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            📄 Google Документ
+          </h3>
+          
+          <div>
+            <label className="block text-zinc-400 text-sm mb-2">Ссылка на документ (опционально)</label>
+            <input
+              type="url"
+              value={recipe.googleDocUrl || ''}
+              onChange={(e) => setRecipe({ ...recipe, googleDocUrl: e.target.value })}
+              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-amber-500 focus:outline-none transition-colors"
+              placeholder="https://docs.google.com/document/d/..."
+            />
+            <p className="text-zinc-500 text-xs mt-2">
+              Если добавить ссылку, на странице курса появится кнопка «Читать документ»
             </p>
           </div>
         </section>

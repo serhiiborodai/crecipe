@@ -35,6 +35,7 @@ export interface Recipe {
   category?: string;
   order?: number;
   isPublished?: boolean;
+  googleDocUrl?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

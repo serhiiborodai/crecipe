@@ -223,10 +223,30 @@ export default function Home() {
             )}
 
             <h1 className="font-display text-3xl sm:text-4xl md:text-[48px] font-bold mb-4 sm:mb-6 opacity-0 animate-fade-in delay-100 px-2">
-              {settings?.heroTitle?.split(' ').slice(0, -1).join(' ')}{' '}
-              <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-400 bg-clip-text text-transparent">
-                {settings?.heroTitle?.split(' ').slice(-1)[0] || 'профессионал'}
-              </span>
+              {(() => {
+                const title = settings?.heroTitle || 'Станьте {{профессионалом}}';
+                const match = title.match(/^(.*?)\{\{(.+?)\}\}(.*)$/);
+                if (match) {
+                  return (
+                    <>
+                      {match[1]}
+                      <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-400 bg-clip-text text-transparent">
+                        {match[2]}
+                      </span>
+                      {match[3]}
+                    </>
+                  );
+                }
+                const words = title.split(' ');
+                return (
+                  <>
+                    {words.slice(0, -1).join(' ')}{' '}
+                    <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-400 bg-clip-text text-transparent">
+                      {words.slice(-1)[0]}
+                    </span>
+                  </>
+                );
+              })()}
             </h1>
 
             <p className="text-base sm:text-xl md:text-2xl text-zinc-400 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed opacity-0 animate-fade-in delay-200 px-2">
