@@ -151,7 +151,7 @@ body {
   height: auto;
   object-fit: contain;
   transition: opacity 0.2s ease;
-  max-height: 175px;
+  max-height: 120px;
 }
 
 @media (max-width: 639px) {
