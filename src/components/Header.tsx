@@ -224,15 +224,6 @@ export default function Header() {
 
             {!user && !loading && (
               <>
-                <a
-                  href="#faq"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
-                >
-                  <span className="text-xl">❓</span>
-                  FAQ
-                </a>
-
                 <button
                   onClick={() => {
                     signInWithGoogle();
